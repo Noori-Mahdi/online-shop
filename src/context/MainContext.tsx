@@ -3,11 +3,18 @@
 import { fetchUserData, logout } from '@/actions/actions'
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 
+interface user {
+  id: string
+  userName: string
+  email: string
+  userImg?: string
+}
+
 interface ContextReturnType {
-  user: any
+  user: user
+  isLoggedIn: boolean
   updateUserInfo: () => void
   handleLogout: () => void
-  isLoggedIn: boolean
 }
 
 interface MainContextPropsType {
@@ -21,13 +28,19 @@ interface MainContextState {
 export const Context = createContext<ContextReturnType>({} as ContextReturnType)
 
 const MainContext = (props: MainContextPropsType) => {
-  const [state, setState] = useState<MainContextState>({ user: undefined })
+  const [state, setState] = useState<MainContextState>({
+    user: undefined,
+  })
+
   const { children } = props
 
   const updateUserInfo = async () => {
     try {
       const result = await fetchUserData()
-      setState((per) => ({ ...per, user: result }))
+      setState((per) => ({
+        ...per,
+        user: result,
+      }))
     } catch (error) {
       console.log(error)
     }
@@ -45,6 +58,10 @@ const MainContext = (props: MainContextPropsType) => {
   const isLoggedIn = useMemo(() => {
     return !!state.user
   }, [state.user])
+
+  useEffect(() => {
+    updateUserInfo()
+  }, [])
 
   return (
     <Context.Provider

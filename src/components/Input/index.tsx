@@ -8,8 +8,9 @@ import validation from '@/utils/validation'
 import { GoDotFill } from 'react-icons/go'
 interface InputType {
   type: 'email' | 'password' | 'text' | 'phone'
-  label: string
   name: string
+  label?: string
+  defaultValue?: string
   placeholder?: string
   required?: boolean
   TooltipText?: string | React.ReactNode
@@ -17,7 +18,10 @@ interface InputType {
   TooltipPosition?: 'top' | 'bottom' | 'right' | 'left'
   error?: string
   activeValidation?: boolean
+  className?: string
+  readOnly?: boolean
   onCheckValid?: (e: boolean) => void
+  onChange?: (e: string) => void
 }
 
 const Input = ({
@@ -29,11 +33,15 @@ const Input = ({
   TooltipActive,
   TooltipPosition,
   TooltipText,
+  defaultValue,
   error,
   placeholder,
+  readOnly,
+  className,
+  onChange,
   onCheckValid,
 }: InputType) => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState(defaultValue ? defaultValue : '')
   const [focus, setFocus] = useState(false)
   const [valid, setValid] = useState({
     isValid: true,
@@ -46,8 +54,8 @@ const Input = ({
   }, [valid.isValid])
 
   return (
-    <div className='my-6'>
-      <div className="relative ">
+    <div className={`${label && 'my-6'} w-full`}>
+      <div className="relative">
         <Tooltip
           text={
             type === 'password' && TooltipActive ? (
@@ -95,7 +103,7 @@ const Input = ({
               ))}
           </label>
           <input
-            className="w-full p-2 border rounded-md text-base font-medium tracking-wide outline-0 transition-all duration-300 ease-in-out hover:border-blue-500 placeholder:text-xs placeholder:font-bold focus:ring-2 focus:ring-blue-500"
+            className={`w-full p-2 border rounded-md text-base font-medium tracking-wide outline-0 transition-all duration-300 ease-in-out hover:border-blue-500 placeholder:text-xs placeholder:font-bold focus:ring-2 focus:ring-blue-500 ${className}`}
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             onChange={(e) => {
@@ -107,8 +115,10 @@ const Input = ({
               } else {
                 setValid({ isValid: true, message: '' })
               }
+              onChange && onChange(e.target.value)
             }}
             id={name}
+            readOnly={readOnly}
             name={name}
             type={
               type === 'password'
@@ -119,8 +129,8 @@ const Input = ({
             }
             value={value}
             required={required}
-            placeholder={focus ? placeholder : undefined}
-          />
+            placeholder={focus || !label ? placeholder : undefined}
+          ></input>
         </Tooltip>
       </div>
       {(error || !valid.isValid) && (

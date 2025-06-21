@@ -13,6 +13,12 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+model Page {
+  id       String @id @unique @default(uuid())
+  pageName String
+  path     String
+}
+
 model user {
   id          String  @id @unique @default(uuid())
   email       String  @unique
@@ -20,4 +26,24 @@ model user {
   password    String
   phoneNumber String
   userImg     String?
+}
+
+model category {
+  id           String    @id @unique @default(uuid())
+  categoryName String
+  products     product[] // تعریف رابطه یک به چند
+}
+
+model product {
+  id         String   @id @unique @default(uuid())
+  Name       String
+  image      String
+  Price      Float
+  discounts  Int
+  Like       Int
+  count      Int
+  sellCount  Int
+  categoryId String
+  category   category @relation(fields: [categoryId], references: [id])
+  createTime DateTime
 }

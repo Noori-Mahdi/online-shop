@@ -1,18 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaCheck } from 'react-icons/fa6'
 interface CheckBoxType {
   checkboxText: string
   active?: boolean
+  onClick: (e: boolean) => void
 }
 
-const CheckBox = ({ checkboxText, active = false }: CheckBoxType) => {
+const CheckBox = ({ onClick, checkboxText, active = false }: CheckBoxType) => {
   const [value, setValue] = useState(active)
+
+  useEffect(() => {
+    setValue(active)
+  }, [active])
+
   return (
     <div
       onClick={() => {
         setValue(!value)
+        onClick(!value)
       }}
       className="flex items-center justify-start cursor-pointer gap-2 my-2"
     >

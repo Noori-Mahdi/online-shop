@@ -1,10 +1,17 @@
 'use server'
 
+import { filterListType } from '@/types/type'
 import prisma from '@/utils/db'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+
+// getPage
+export async function getPage() {
+  const pages = await prisma.page.findMany()
+  return pages
+}
 
 // Register new user
 export async function registerUser(formData: FormData) {
@@ -74,6 +81,7 @@ export async function loginUser(formData: FormData) {
   })
 
   return {
+    userId: user.id,
     message: 'User logged in successfully',
   }
 }
@@ -132,4 +140,71 @@ export async function fetchUserData() {
   }
 
   return user
+}
+
+// Get user info for previous account whit IDs
+export async function getUsersInfo(usersId: string[]) {
+  if (usersId.length <= 0) throw new Error('userId array empty')
+
+  const users = await prisma.user.findMany({
+    where: {
+      id: {
+        in: usersId,
+      },
+    },
+    select: {
+      id: true,
+      userName: true,
+      email: true,
+      userImg: true,
+    },
+  })
+
+  return users
+}
+
+// Get Categories
+export async function getCategory() {
+  const categories = await prisma.category.findMany()
+  return categories
+}
+
+// Get Product with recommendations Filter
+export async function getProductRecommendations(
+  recommendationType: filterListType
+) {
+  let recommendationList
+  if (recommendationType == 'bestseller') {
+    recommendationList = await prisma.product.findMany({
+      orderBy: {
+        sellCount: 'desc',
+      },
+      take: 8,
+    })
+  } else if (recommendationType == 'new arrival') {
+    recommendationList = await prisma.product.findMany({
+      orderBy: {
+        createTime: 'desc',
+      },
+      take: 8,
+    })
+  } else if (recommendationType == 'discountUp') {
+    recommendationList = await prisma.product.findMany({
+      orderBy: {
+        discounts: 'desc',
+      },
+      take: 8,
+    })
+  } else if (recommendationType == 'featured products') {
+    recommendationList = await prisma.product.findMany({
+      orderBy: {
+        Like: 'desc',
+      },
+      take: 8,
+    })
+  } else {
+    throw new Error('recommendationType not found')
+  }
+
+  return recommendationList
 }

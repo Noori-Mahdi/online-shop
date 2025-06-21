@@ -1,6 +1,6 @@
 import BreadcrumbLinks from '@/components/BreadcrumbLinks/BreadcrumbLinks'
 import Footer from '@/ui/Footer'
-import LoginForm from '@/ui/loginForm'
+import LoginForm from '@/ui/LoginForm'
 import PreviousAccounts from '@/ui/PreviousAccounts'
 import Link from 'next/link'
 

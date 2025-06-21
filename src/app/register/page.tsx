@@ -1,6 +1,6 @@
 import BreadcrumbLinks from '@/components/BreadcrumbLinks/BreadcrumbLinks'
 import Footer from '@/ui/Footer'
-import RegisterForm from '@/ui/FormRegister'
+import RegisterForm from '@/ui/RegisterForm'
 
 export default function Register() {
   return (
