@@ -1,33 +1,31 @@
 import BreadcrumbLinks from '@/components/BreadcrumbLinks/BreadcrumbLinks'
+import Container from '@/components/Container'
 import Footer from '@/ui/Footer'
-import LoginForm from '@/ui/LoginForm'
+import LoginForm from '@/ui/loginForm'
 import PreviousAccounts from '@/ui/PreviousAccounts'
-import Link from 'next/link'
 
 export default function Login() {
   return (
-    <div className="w-screen h-screen flex flex-col justify-between">
-      <div className="flex justify-center  gap-2 p-10 bg-gray-100 grow">
-        <div className="w-1/2">
-          <PreviousAccounts />
+    <Container className="h-screen lg:px-16 lg:py-8 md:py-4 sm:py-3 p-1">
+      <div className="flex h-full w-full flex-col justify-between">
+        <div className="flex flex-col md:flex-row justify-center gap-3 bg-gray-100 grow">
+          <div className="lg:w-[500px] md:w-[350px] w-full order-2 md:order-1">
+            <PreviousAccounts />
+          </div>
+          <div className="flex flex-col gap-1 grow order-1 md:order-2">
+            <BreadcrumbLinks
+              title="Login Form"
+              links={[
+                { url: '/login', text: 'sign in', isActive: true },
+                { url: '/register', text: 'sign up' },
+              ]}
+              className="pb-4"
+            />
+            <LoginForm className={'grow'} />
+          </div>
         </div>
-        <div className="w-1/2">
-          <BreadcrumbLinks
-            links={[
-              { url: '/login', text: 'sign in', isActive: true },
-              { url: '/register', text: 'sign up' },
-            ]}
-          />
-          <LoginForm />
-          <Link
-            className="w-11/12 mx-auto block text-center p-3 rounded-full font-semibold transition-all duration-300 ease-in-out bg-blue-500 text-white hover:bg-blue-600 hover:scale-105 hover:shadow-lg"
-            href="/register"
-          >
-            Create new account
-          </Link>
-        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </Container>
   )
 }

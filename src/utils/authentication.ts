@@ -61,7 +61,7 @@ export const getUserInfo = async (req: any) => {
       select: {
         id: true,
         email: true,
-        name: true,
+        userName: true,
       },
     });
     return user;

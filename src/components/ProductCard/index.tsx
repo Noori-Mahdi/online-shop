@@ -1,21 +1,22 @@
 import Image from 'next/image'
 import { IoMdHeartEmpty } from 'react-icons/io'
 import Button from '../Button'
-interface ProductCardTypeProps {
-  ProductId: string
-  productImage: string
-  ProductName: string
-  ProductPrice: number
-}
+import { TProductCardProps } from '@/types/type'
 
-const ProductCard = ({ProductId, productImage, ProductName, ProductPrice}: ProductCardTypeProps) => {
+
+const ProductCard = ({
+  id,
+  image,
+  name,
+  price,
+}: TProductCardProps) => {
   return (
     <div>
       <IoMdHeartEmpty />
-      <Image alt={ProductName} src={productImage} />
-      <div>{ProductName}</div>
-      <div>{ProductPrice}</div>
-      <Button label={'buy now'} type='button'/>
+      {/* <Image alt={name} src={image} /> */}
+      <div>{price}</div>
+      <div>{name}</div>
+      <Button label={'buy now'} type="button" />
     </div>
   )
 }

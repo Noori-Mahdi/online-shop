@@ -35,7 +35,7 @@ const NavBar = async () => {
                   'lg:hidden text-gray-900 bg-white hover:bg-white  flex justify-center items-center rounded-full text-lg m-0 p-0 '
                 }
                 classNameList={
-                  'fixed flex flex-col capitalize text-2xl gap-6 font-bold justify-center items-center w-screen h-screen bg-gray-800 opacity-95 left-0 top-0'
+                  'fixed top-0 right-0 h-full w-full sm:w-64 bg-gray-900 shadow-lg p-6 transform transition-transform duration-300 flex flex-col space-y-6 z-50flex flex-col space-y-6 z-50'
                 }
               />
               <span className="hidden "></span>

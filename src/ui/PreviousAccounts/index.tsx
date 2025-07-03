@@ -7,29 +7,38 @@ import Modal from '@/components/Modal'
 import { Context } from '@/context/MainContext'
 import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-
-interface usersInfo {
-  id: string
-  email: string
-  userName: string
-  userImg: string | null
-}
+import { TUsersInfo } from '@/types/type'
+import { VscPersonAdd } from 'react-icons/vsc'
+import { useToast } from '@/context/ToastContext'
 
 const PreviousAccounts = () => {
-  const [usersInfo, setUsersInfo] = useState<usersInfo[] | null>()
+  const [usersInfo, setUsersInfo] = useState<TUsersInfo[] | null>(null)
   const [showPasswordForm, setShowPasswordForm] = useState(false)
   const [selectUserEmail, setSelectUserEmail] = useState<string>()
+  const [loading, setLoading] = useState(false)
   const { updateUserInfo } = useContext(Context)
+  const { addToast } = useToast()
+  
   const router = useRouter()
 
-  const handleLogin = async (formData: FormData) => {
+  const Login = async (formData: FormData) => {
     try {
       await loginUser(formData)
       await updateUserInfo()
+      addToast('Login successful. Welcome back!','success')
       router.push('/home')
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    setLoading(true)
+    addToast('Processing your request, please wait...','info')
+    await Login(formData)
+    setLoading(false)
   }
 
   const getPreviousAccountInfo = async () => {
@@ -54,23 +63,33 @@ const PreviousAccounts = () => {
   }, [])
 
   return (
-    <div>
-      <div>
-        <h3 className="text-3xl font-bold tracking-wide">Previous Accounts</h3>
-        <span className="text-sm">Select your account or add a new one</span>
-      </div>
-      <div className="flex gap-2 flex-wrap mt-3 max-h-96 overflow-scroll p-2">
-        {usersInfo?.map((user) => (
-          <AccountCard
-            key={user.id}
-            userId={user.id}
-            userImg={user.userImg}
-            userName={user.userName}
-            handleClick={() => {
-              setSelectUserEmail(user.email), setShowPasswordForm(true)
-            }}
-          />
-        ))}
+    <div className="flex flex-col gap-2 h-full">
+      <h3 className="text-2xl font-bold tracking-wide">Previous Accounts</h3>
+      <div className=" grow  rounded-md p-2 bg-gray-300 max-w-[200px] sm:max-w-[350px] md:max-w-[500px] m-auto md:m-0">
+        {usersInfo?.length ? (
+          <div className="flex gap-2 h-full flex-wrap p-2 overflow-auto overflow-x-hidden  rounded">
+            {usersInfo?.map((user) => (
+              <AccountCard
+                key={user.id}
+                id={user.id}
+                userImg={user.userImg}
+                userName={user.userName}
+                handleClick={() => {
+                  setSelectUserEmail(user.email), setShowPasswordForm(true)
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col text-center p-4 justify-center items-center text-xs gap-3 h-full select-none  rounded font-bold">
+            <VscPersonAdd className="text-6xl text-gray-900" />
+            <div>There are currently no users to display</div>
+            <div className="text-gray-900">
+              Want us to remember you next time? Just check the 'Remember Me'
+              box
+            </div>
+          </div>
+        )}
       </div>
       <Modal
         isOpen={showPasswordForm}
@@ -78,7 +97,7 @@ const PreviousAccounts = () => {
           setShowPasswordForm(false)
         }}
       >
-        <form action={handleLogin}>
+        <form onSubmit={handleLogin}>
           <Input
             name="email"
             label="your email"
@@ -93,9 +112,15 @@ const PreviousAccounts = () => {
             type="password"
             activeValidation={false}
             required
+            readOnly={loading}
           />
 
-          <Button label="login" type="submit" />
+          <Button
+            label={loading ? 'Loading....' : 'login'}
+            type="submit"
+            disabled={loading}
+            rounded="normal"
+          />
         </form>
       </Modal>
     </div>

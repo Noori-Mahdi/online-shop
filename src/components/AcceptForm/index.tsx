@@ -1,14 +1,12 @@
+import { TAcceptFormProps } from '@/types/type'
 import Button from '../Button'
 
-interface AcceptForm {
-  text: string
-  onClick: (e: boolean) => void
-}
-
-const AcceptForm = ({ text, onClick }: AcceptForm) => {
+const AcceptForm = ({ text, onClick }: TAcceptFormProps) => {
   return (
     <div>
-      <div className='text-sm font-semibold tracking-wide text-justify my-5'>{text}</div>
+      <div className="text-sm font-semibold tracking-wide text-justify my-3">
+        {text}
+      </div>
       <div className="flex justify-center items-center gap-3 ">
         <Button
           onClick={() => {
@@ -16,15 +14,17 @@ const AcceptForm = ({ text, onClick }: AcceptForm) => {
           }}
           label="cansel"
           type="button"
-          className="bg-red-600 capitalize hover:bg-red-700"
+          rounded="normal"
+          className="bg-red-900 capitalize hover:bg-red-800"
         />
         <Button
           onClick={() => {
             onClick(true)
           }}
           label="accept"
+          rounded="normal"
           type="button"
-          className="bg-green-700 capitalize hover:bg-green-800"
+          className="bg-green-900 capitalize hover:bg-green-800"
         />
       </div>
     </div>

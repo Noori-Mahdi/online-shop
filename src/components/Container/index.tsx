@@ -1,18 +1,20 @@
-interface ContainerPropsType {
-  children: React.ReactNode
-  containerClassName?: string
-  removeSpaceY?: boolean
-  removeSpaceX?: boolean
-}
+import { TContainerProps } from '@/types/type'
+import { twMerge } from 'tailwind-merge'
+
 const Container = ({
   children,
-  containerClassName,
+  className,
   removeSpaceX = false,
   removeSpaceY = false,
-}: ContainerPropsType) => {
+}: TContainerProps) => {
   return (
     <div
-      className={` ${removeSpaceX ? 'px-0' : 'px-3  md:px-16  lg:px-24'} ${removeSpaceY ? 'py-0' : 'py-3 '}${containerClassName} `}
+      className={twMerge(
+        'px-3 py-3 md:px-16  lg:px-24 ',
+        removeSpaceX && 'px-0',
+        removeSpaceY && 'py-0',
+        className
+      )}
     >
       {children}
     </div>

@@ -1,11 +1,8 @@
+import { TPasswordRulesProps } from '@/types/type'
 import React from 'react'
 import { FaCheck, FaTimes } from 'react-icons/fa'
 
-interface PasswordRulesProps {
-  password: string
-}
-
-const PasswordRules = ({ password }: PasswordRulesProps) => {
+const PasswordRules = ({ password }: TPasswordRulesProps) => {
   const rules = [
     {
       label: 'At least 8 characters',
@@ -30,7 +27,7 @@ const PasswordRules = ({ password }: PasswordRulesProps) => {
   ]
 
   return (
-    <div className="mt-4 w-62 bg-gray-50 border border-gray-300 rounded p-4 text-sm">
+    <div className=" w-62 bg-gray-100 border border-gray-300 rounded p-4 text-sm z-20">
       <p className="font-medium text-black mb-2">
         Your password must meet the following requirements :
       </p>

@@ -1,27 +1,21 @@
 'use client'
 
 import { fetchUserData, logout } from '@/actions/actions'
+import { TContextUser } from '@/types/type'
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 
-interface user {
-  id: string
-  userName: string
-  email: string
-  userImg?: string
-}
-
-interface ContextReturnType {
-  user: user
+type ContextReturnType = {
+  user: TContextUser
   isLoggedIn: boolean
   updateUserInfo: () => void
   handleLogout: () => void
 }
 
-interface MainContextPropsType {
+type MainContextPropsType = {
   children: React.ReactNode
 }
 
-interface MainContextState {
+type MainContextState = {
   user: any | undefined
 }
 

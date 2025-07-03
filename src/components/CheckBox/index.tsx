@@ -1,14 +1,17 @@
 'use client'
 
+import { TCheckBoxProps } from '@/types/type'
 import { useEffect, useState } from 'react'
 import { FaCheck } from 'react-icons/fa6'
-interface CheckBoxType {
-  checkboxText: string
-  active?: boolean
-  onClick: (e: boolean) => void
-}
+import { twMerge } from 'tailwind-merge'
 
-const CheckBox = ({ onClick, checkboxText, active = false }: CheckBoxType) => {
+const CheckBox = ({
+  onClick,
+  checkboxText,
+  active = false,
+  className,
+  disable = false,
+}: TCheckBoxProps) => {
   const [value, setValue] = useState(active)
 
   useEffect(() => {
@@ -17,20 +20,36 @@ const CheckBox = ({ onClick, checkboxText, active = false }: CheckBoxType) => {
 
   return (
     <div
-      onClick={() => {
-        setValue(!value)
-        onClick(!value)
-      }}
-      className="flex items-center justify-start cursor-pointer gap-2 my-2"
+      className={twMerge('flex items-center justify-start gap-2', className)}
     >
       <div
-        className={`flex justify-center items-center w-4 h-4 rounded-sm border border-gray-500 transition-all duration-400 ease-in-out ${value ? 'bg-sky-500 scale-110' : 'scale-100'}`}
+        onClick={() => {
+          if (!disable) {
+            setValue(!value)
+            onClick(!value)
+          }
+        }}
+        className={twMerge(
+          `flex justify-center items-center  cursor-pointer w-4 h-4 rounded-sm border border-gray-500 transition-all duration-400 ease-in-out`,
+          value ? 'bg-sky-500 scale-110' : 'scale-100',
+          disable && 'bg-gray-500 cursor-not-allowed'
+        )}
       >
         {value && (
           <FaCheck className="text-xs text-white opacity-100 transition-opacity duration-300 ease-in-out" />
         )}
       </div>
-      <span className="text-sm select-none">{checkboxText}</span>
+      <span
+        onClick={() => {
+          if (!disable) {
+            setValue(!value)
+            onClick(!value)
+          }
+        }}
+        className="text-sm select-none"
+      >
+        {checkboxText}
+      </span>
     </div>
   )
 }

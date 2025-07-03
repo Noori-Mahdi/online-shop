@@ -1,23 +1,21 @@
 'use client'
 
+import { TModalProps } from '@/types/type'
 import { useEffect, useState } from 'react'
 import { IoIosClose } from 'react-icons/io'
-
-export interface ModalPropsType {
-  isOpen?: boolean
-  onClose?: () => void
-  children: React.ReactNode
-  className?: string
-  size?: string
-}
+import { IoWarningOutline } from 'react-icons/io5'
+import { MdInfoOutline, MdOutlineReportGmailerrorred } from 'react-icons/md'
+import { twMerge } from 'tailwind-merge'
 
 const Modal = ({
+  type = null,
   isOpen = false,
   onClose,
   className,
   children,
   size,
-}: ModalPropsType) => {
+  label,
+}: TModalProps) => {
   const [show, setShow] = useState(isOpen)
 
   useEffect(() => {
@@ -33,12 +31,41 @@ const Modal = ({
         className="absolute left-0 top-0 w-full h-full "
       ></div>
       <div
-        className={`${className} p-6 rounded shadow-lg border text-zinc-200 bg-neutral-900 border-sky-500 relative ${size ? size : 'w-96'}`}
+        className={twMerge(
+          `px-3 py-4 rounded shadow-lg border text-zinc-200 bg-neutral-900 border-sky-500 relative`,
+          size ? size : 'w-96',
+          className
+        )}
       >
-        <IoIosClose
-          className="absolute text-2xl top-2 right-2 cursor-pointer text-gray-300 hover:text-red-600"
-          onClick={onClose}
-        />
+        <div
+          className={twMerge(
+            'flex justify-end items-center text-lg',
+            (type != null || label) && 'justify-between'
+          )}
+        >
+          <div className="flex gap-2 items-center">
+            {type === 'warning' ? (
+              <IoWarningOutline className="text-yellow-500" />
+            ) : type === 'info' ? (
+              <MdInfoOutline className="text-sky-600" />
+            ) : type === 'error' ? (
+              <MdOutlineReportGmailerrorred className="text-red-800" />
+            ) : null}
+            {label ? (
+              <span className="capitalize tracking-wide font-semibold">
+                {label}
+              </span>
+            ) : (
+              <span className="capitalize tracking-wide font-semibold">
+                {type}
+              </span>
+            )}
+          </div>
+          <IoIosClose
+            className=" cursor-pointer text-2xl text-gray-300 hover:text-red-600"
+            onClick={onClose}
+          />
+        </div>
         {children}
       </div>
     </div>

@@ -5,24 +5,9 @@ import { IoIosEyeOff, IoIosEye } from 'react-icons/io'
 import Tooltip from '../Tooltip'
 import PasswordRules from '@/ui/PasswordRules/PasswordRules'
 import validation from '@/utils/validation'
-import { GoDotFill } from 'react-icons/go'
-interface InputType {
-  type: 'email' | 'password' | 'text' | 'phone'
-  name: string
-  label?: string
-  defaultValue?: string
-  placeholder?: string
-  required?: boolean
-  TooltipText?: string | React.ReactNode
-  TooltipActive?: boolean
-  TooltipPosition?: 'top' | 'bottom' | 'right' | 'left'
-  error?: string
-  activeValidation?: boolean
-  className?: string
-  readOnly?: boolean
-  onCheckValid?: (e: boolean) => void
-  onChange?: (e: string) => void
-}
+import { GoDot } from 'react-icons/go'
+import { TInputProps } from '@/types/type'
+import { twMerge } from 'tailwind-merge'
 
 const Input = ({
   type,
@@ -30,9 +15,10 @@ const Input = ({
   name,
   activeValidation = true,
   required = false,
-  TooltipActive,
-  TooltipPosition,
-  TooltipText,
+  tooltipActive,
+  tooltipPosition,
+  tooltipText,
+  toolTipClassName,
   defaultValue,
   error,
   placeholder,
@@ -40,7 +26,7 @@ const Input = ({
   className,
   onChange,
   onCheckValid,
-}: InputType) => {
+}: TInputProps) => {
   const [value, setValue] = useState(defaultValue ? defaultValue : '')
   const [focus, setFocus] = useState(false)
   const [valid, setValid] = useState({
@@ -54,23 +40,24 @@ const Input = ({
   }, [valid.isValid])
 
   return (
-    <div className={`${label && 'my-6'} w-full`}>
+    <div className={`${label && 'my-8'} w-full`}>
       <div className="relative">
         <Tooltip
           text={
-            type === 'password' && TooltipActive ? (
+            type === 'password' && tooltipActive ? (
               <PasswordRules password={value ?? ''} />
             ) : (
-              TooltipText
+              tooltipText
             )
           }
-          position={TooltipPosition}
-          tooltipActive={TooltipActive}
+          position={tooltipPosition}
+          tooltipActive={tooltipActive}
+          className={toolTipClassName}
         >
           <label
             className={`absolute select-none cursor-pointer flex items-center justify-between w-full transition-all duration-200 ${
               focus || value.length != 0
-                ? 'top-0 -translate-y-5'
+                ? 'top-0 -translate-y-6'
                 : 'top-1/2 -translate-y-1/2 p-2'
             } capitalize font-medium text-sm tracking-wide`}
             htmlFor={name}
@@ -81,29 +68,28 @@ const Input = ({
 
             {type === 'password' &&
               (showPassword ? (
-                <div className="flex items-center">
+                <div
+                  className="flex items-center"
+                  onClick={() => setShowPassword(false)}
+                >
                   <IoIosEye />
-                  <span
-                    className="text-xs pl-1"
-                    onClick={() => setShowPassword(false)}
-                  >
-                    Show
-                  </span>
+                  <span className="text-xs pl-1">Show</span>
                 </div>
               ) : (
-                <div className="flex items-center">
+                <div
+                  className="flex items-center"
+                  onClick={() => setShowPassword(true)}
+                >
                   <IoIosEyeOff />
-                  <span
-                    className="text-xs pl-1"
-                    onClick={() => setShowPassword(true)}
-                  >
-                    Hiden
-                  </span>
+                  <span className="text-xs pl-1">Hiden</span>
                 </div>
               ))}
           </label>
           <input
-            className={`w-full p-2 border rounded-md text-base font-medium tracking-wide outline-0 transition-all duration-300 ease-in-out hover:border-blue-500 placeholder:text-xs placeholder:font-bold focus:ring-2 focus:ring-blue-500 ${className}`}
+            className={twMerge(
+              'w-full p-2 border rounded-md text-base font-medium tracking-wide outline-0 transition-all duration-300 ease-in-out hover:border-blue-500 placeholder:text-xs placeholder:font-bold focus:ring-2 focus:ring-blue-500 z-10',
+              className
+            )}
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
             onChange={(e) => {
@@ -134,8 +120,8 @@ const Input = ({
         </Tooltip>
       </div>
       {(error || !valid.isValid) && (
-        <div className="text-red-600 w-full flex gap-1 items-center text-sm mt-1">
-          <GoDotFill className="text-xs font-semibold" />
+        <div className="text-red-600 w-full flex gap-1 pl-3 items-center text-xs font-semibold mt-1">
+          <GoDot className="text-xs" />
           <span className="whitespace-normal truncate break-words">
             {error || valid.message}
           </span>

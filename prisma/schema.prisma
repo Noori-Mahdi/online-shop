@@ -31,18 +31,18 @@ model user {
 model category {
   id           String    @id @unique @default(uuid())
   categoryName String
-  products     product[] // تعریف رابطه یک به چند
+  products     product[]
 }
 
 model product {
   id         String   @id @unique @default(uuid())
-  Name       String
+  name       String
   image      String
-  Price      Float
-  discounts  Int
-  Like       Int
-  count      Int
-  sellCount  Int
+  price      Float    @default(0)
+  discounts  Int      @default(0)
+  like       Int      @default(0)
+  count      Int      @default(0)
+  sellCount  Int      @default(0)
   categoryId String
   category   category @relation(fields: [categoryId], references: [id])
   createTime DateTime

@@ -1,20 +1,14 @@
+import { TTooltipProps } from '@/types/type'
 import React, { useState } from 'react'
-
-interface TooltipType {
-  children: React.ReactNode
-  text: string | React.ReactNode
-  position?: 'top' | 'bottom' | 'right' | 'left'
-  tooltipClass?: string
-  tooltipActive?: boolean
-}
+import { twMerge } from 'tailwind-merge'
 
 const Tooltip = ({
   children,
   text,
   position = 'top',
-  tooltipClass,
+  className,
   tooltipActive = false,
-}: TooltipType) => {
+}: TTooltipProps) => {
   const [visible, setVisible] = useState(false)
 
   if (!tooltipActive) {
@@ -30,14 +24,20 @@ const Tooltip = ({
 
   return (
     <div
-      className="relative w-full"
+      className="relative"
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
     >
       {children}
       {visible && (
         <div
-          className={`absolute ${tooltipPosition[position]} px-3 py-2 bg-gray-300 text-white text-xs rounded shadow-lg opacity-100 transition-opacity duration-300 ${tooltipClass}`}
+          className={
+            twMerge(
+              'absolute p-3 bg-gray-500 text-white text-xs rounded',
+              tooltipPosition[position],
+              className
+            )
+          }
         >
           {text}
         </div>

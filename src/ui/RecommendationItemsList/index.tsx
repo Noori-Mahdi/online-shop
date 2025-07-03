@@ -2,14 +2,14 @@
 import { getProductRecommendations } from '@/actions/actions'
 import ProductList from '@/components/ProductList'
 import ItemList from '@/components/ProductList'
-import { filterListType, productType } from '@/types/type'
+import { filterListType, TProduct } from '@/types/type'
 import { useState } from 'react'
 
 const RecommendationItemsList = () => {
   const [typeSearchProduct, setTypeSearchProduct] =
     useState<filterListType>('new arrival')
 
-  const [productList, setProductList] = useState<productType[]>([])
+  const [productList, setProductList] = useState<TProduct[]>([])
 
   const filterList: filterListType[] = [
     'new arrival',

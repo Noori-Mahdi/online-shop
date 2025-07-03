@@ -1,22 +1,19 @@
 import ProductCard from '@/components/ProductCard'
-import { productType } from '@/types/type'
-interface ItemListPropsType{
-    productList:productType[]
-    title?: string
-}
+import { TItemListProps } from '@/types/type'
 
-const ProductList = ({productList, title}:ItemListPropsType) => {
+
+const ProductList = ({ productList, title }: TItemListProps) => {
   return (
     <ul>
-      <div className='text-lg font-medium'>{title}</div>
+      <div className="text-lg font-medium">{title}</div>
       {productList.map((product) => (
-        <li>
+        <li key={product.id}>
           <ProductCard
-            ProductId={product.id}
+            id={product.id}
             key={product.id}
-            ProductName={product.Name}
-            ProductPrice={product.Price}
-            productImage={product.image}
+            name={product.name}
+            price={product.price}
+            image={product.image}
           />
         </li>
       ))}
