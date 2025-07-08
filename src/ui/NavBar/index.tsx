@@ -5,12 +5,13 @@ import MinProfile from '@/ui/MinProfile'
 import BasketList from '@/ui/BasketList'
 import Logo from '../Logo'
 import { getPage } from '@/actions/actions'
+import { TNavBarProps } from '@/types/type'
 
-const NavBar = async () => {
+const NavBar = async ({className}:TNavBarProps) => {
   const pages = await getPage()
 
   return (
-    <div className="fixed left-0 top-0 w-screen bg-white">
+    <div className="fixed left-0 top-0 w-screen bg-white z-30 border-b border-gray-400">
       <Container>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3 sm:gap-8">

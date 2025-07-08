@@ -3,10 +3,9 @@
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { useRef, useState, useEffect } from 'react'
 import { TSliderProps } from '@/types/type'
+import { twMerge } from 'tailwind-merge'
 
-
-
-const Slider = ({ title, children }: TSliderProps) => {
+const Slider = ({ title, children, className }: TSliderProps) => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
@@ -45,7 +44,7 @@ const Slider = ({ title, children }: TSliderProps) => {
   }, [])
 
   return (
-    <div className="w-full">
+    <div className={twMerge('w-full', className)}>
       <div className="flex justify-between items-center py-3 text-lg font-bold">
         <div className="capitalize">{title}</div>
         <div className="flex text-2xl gap-1">
@@ -66,9 +65,9 @@ const Slider = ({ title, children }: TSliderProps) => {
 
       <div
         ref={scrollRef}
-        className="overflow-hidden scroll-smooth px-2 scrollbar-hide"
+        className="overflow-hidden scroll-smooth xs:px-2 scrollbar-hide"
       >
-        <ul className="flex gap-3 justify-center w-max min-w-full">
+        <ul className="flex flex-wrap md:flex-nowrap justify-start md:justify-between w-[131dvw] sm:w-[128dvw] gap-1 sm:gap-3 md:w-max md:min-w-full">
           {children}
         </ul>
       </div>

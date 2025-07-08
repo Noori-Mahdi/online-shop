@@ -56,7 +56,7 @@ const SearchBox = () => {
           type="text"
           placeholder="Search"
           onChange={(e) => setSearchValue(e)}
-          className="flex rounded-none grow bg-white text-sm h-8 p-0 m-0 focus:ring-transparent md:border-l-0 border-0 md:bg-transparent"
+          className="flex rounded-none grow  pl-2 bg-white text-sm h-8 m-0 focus:ring-transparent md:border-l-0 border-0 md:bg-transparent"
         />
         <div
           onClick={() => {

@@ -47,3 +47,20 @@ model product {
   category   category @relation(fields: [categoryId], references: [id])
   createTime DateTime
 }
+
+model Banner {
+  id          String     @id @unique @default(uuid())
+  title       String
+  content     String
+  url         String
+  image       String
+  imageMobile String?
+  className   String?
+  active      Boolean    @default(false)
+  type        BannerType @default(solo)
+}
+
+enum BannerType {
+  group
+  solo
+}

@@ -1,6 +1,12 @@
 'use server'
 
-import { filterListType, TLoginResponse, TRegisterResponse } from '@/types/type'
+import {
+  TFilterListType,
+  TBanners,
+  TLoginResponse,
+  TProductRecommendations,
+  TRegisterResponse,
+} from '@/types/type'
 import prisma from '@/utils/db'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -198,42 +204,40 @@ export async function getCategory() {
 
 // Get Product with recommendations Filter
 export async function getProductRecommendations(
-  recommendationType: filterListType
-) {
-  let recommendationList
-  if (recommendationType == 'bestseller') {
-    recommendationList = await prisma.product.findMany({
-      orderBy: {
-        sellCount: 'desc',
-      },
-      take: 8,
-    })
-  } else if (recommendationType == 'new arrival') {
-    recommendationList = await prisma.product.findMany({
-      orderBy: {
-        createTime: 'desc',
-      },
-      take: 8,
-    })
-  } else if (recommendationType == 'discountUp') {
-    recommendationList = await prisma.product.findMany({
-      orderBy: {
-        discounts: 'desc',
-      },
-      take: 8,
-    })
-  } else if (recommendationType == 'featured products') {
-    recommendationList = await prisma.product.findMany({
-      orderBy: {
-        like: 'desc',
-      },
-      take: 8,
-    })
-  } else {
-    throw new Error('recommendationType not found')
-  }
+  recommendationType: TFilterListType,
+  count: number
+): Promise<TProductRecommendations> {
+  try {
+    // Create Obj with Record <K:key,V:value>
+    const orderOptions: Record<
+      TFilterListType,
+      { [key: string]: 'asc' | 'desc' }
+    > = {
+      bestseller: { sellCount: 'desc' },
+      'new arrival': { createTime: 'desc' },
+      discountUp: { discounts: 'desc' },
+      'featured products': { like: 'desc' },
+    }
 
-  return recommendationList
+    const orderBy = orderOptions[recommendationType]
+
+    if (!orderBy) {
+      return { message: 'recommendationType not found', type: 'error' }
+    }
+
+    const recommendationList = await prisma.product.findMany({
+      orderBy,
+      take: count,
+    })
+
+    return {
+      message: 'Items have been successfully loaded.',
+      type: 'success',
+      data: recommendationList,
+    }
+  } catch (error) {
+    return { message: 'Something went wrong', type: 'error' }
+  }
 }
 
 // test add automat product
@@ -258,5 +262,22 @@ export async function importProducts(products: Array<any>) {
       },
     })
   }
-  console.log('✅ All products imported successfully.')
+  console.log('All products imported successfully.')
+}
+
+export async function getBanners(active: boolean): Promise<TBanners> {
+  try {
+    const result = await prisma.banner.findMany({
+      where: {
+        active: active,
+      },
+    })
+    return {
+      message: 'All banner imported successfully.',
+      type: 'success',
+      data: result,
+    }
+  } catch (error) {
+    return { message: 'Something went wrong', type: 'error', data: null }
+  }
 }

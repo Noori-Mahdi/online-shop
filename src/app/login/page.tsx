@@ -1,8 +1,9 @@
-import BreadcrumbLinks from '@/components/BreadcrumbLinks/BreadcrumbLinks'
+import BreadcrumbLinks from '@/components/GroupLink/BreadcrumbLinks'
 import Container from '@/components/Container'
-import Footer from '@/ui/Footer'
+import ProfileFooter from '@/ui/ProfileFooter'
 import LoginForm from '@/ui/loginForm'
 import PreviousAccounts from '@/ui/PreviousAccounts'
+import GroupLink from '@/components/GroupLink/BreadcrumbLinks'
 
 export default function Login() {
   return (
@@ -13,7 +14,7 @@ export default function Login() {
             <PreviousAccounts />
           </div>
           <div className="flex flex-col gap-1 grow order-1 md:order-2">
-            <BreadcrumbLinks
+            <GroupLink
               title="Login Form"
               links={[
                 { url: '/login', text: 'sign in', isActive: true },
@@ -24,7 +25,7 @@ export default function Login() {
             <LoginForm className={'grow'} />
           </div>
         </div>
-        <Footer />
+        <ProfileFooter />
       </div>
     </Container>
   )

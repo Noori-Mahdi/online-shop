@@ -35,14 +35,20 @@ export type TProduct = {
   categoryId: String
   createTime: Date
 }
+
+export type Tcategory = {
+  id: string
+  categoryName: string
+}
+
 // TProductCardProps is used in ProductCard Componenet
 export type TProductCardProps = Pick<
   TProduct,
-  'id' | 'name' | 'image' | 'price'
->
+  'id' | 'name' | 'image' | 'price' | 'like' | 'discounts'
+> & { className?: string }
 
 // Fundamental types used across the app
-export type filterListType =
+export type TFilterListType =
   | 'new arrival'
   | 'bestseller'
   | 'featured products'
@@ -58,6 +64,9 @@ export type Link = {
 export type TItemListProps = {
   productList: TProduct[]
   title?: string
+  isLoading?: boolean
+  count?: number
+  className?: string
 }
 
 export type TButtomProps = {
@@ -96,7 +105,7 @@ export type TInputProps = {
   tooltipText?: string | React.ReactNode
   tooltipActive?: boolean
   tooltipPosition?: 'top' | 'bottom' | 'right' | 'left'
-  toolTipClassName?:string
+  toolTipClassName?: string
   error?: string
   activeValidation?: boolean
   className?: string
@@ -118,6 +127,7 @@ export type TModalProps = {
 export type TSliderProps = {
   title: string
   children: React.ReactNode
+  className?: string
 }
 
 export type TTooltipProps = {
@@ -153,6 +163,18 @@ export type TToastProps = {
   onClose?: () => void
 }
 
+export type TCategoryListProps = {
+  className?: string
+}
+
+export type TNavBarProps = {
+  className?: string
+}
+
+export type TRecommendationItemsListProps = {
+  filterList: TFilterListType[]
+  count: number
+}
 // actions Function Type
 
 export type TLoginResponse =
@@ -163,3 +185,22 @@ export type TRegisterResponse = {
   type: 'success' | 'error'
   message: string
 }
+
+export type TProductRecommendations =
+  | { type: 'success'; message: string; data: TProduct[] }
+  | { type: 'error'; message: string }
+
+export type TBanner = {
+  id: string
+  title: string
+  content: string
+  url: string
+  image: string
+  imageMobile?: string
+  type: 'solo' | 'group'
+  active: boolean
+}
+
+export type TBanners =
+  | { type: 'success'; message: string; data: TBanner[] }
+  | { type: 'error'; message: string; data: null }

@@ -1,3 +1,4 @@
+import AppFooter from '@/ui/AppFooter'
 import NavBar from '@/ui/NavBar'
 
 export default function RootLayout({
@@ -7,8 +8,9 @@ export default function RootLayout({
 }>) {
   return (
     <div className="">
-      <NavBar />
+      <NavBar/>
       {children}
+      <AppFooter />
     </div>
   )
 }

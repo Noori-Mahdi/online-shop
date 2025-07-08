@@ -1,47 +1,39 @@
-import { getCategory, getProductRecommendations, importProducts } from '@/actions/actions'
+import { getBanners, getProductRecommendations } from '@/actions/actions'
 import Container from '@/components/Container'
 import ProductList from '@/components/ProductList'
-import Slider from '@/components/Slider'
 import CardBanner from '@/ui/CardBanner'
 import GridBanner from '@/ui/GridBanner/inedx'
 import RecommendationItemsList from '@/ui/RecommendationItemsList'
-import { getIconByTitle } from '@/utils/iconMap'
-import products from '../../../../data/products.json'
+
+import CategoryList from '@/ui/CategoryList'
+import { TFilterListType } from '@/types/type'
 
 export default async function Home() {
-  const categories = await getCategory()
-  const topDiscountedItems = await getProductRecommendations('discountUp')
+  const result = await getBanners(true)
+  let banner = null
+  let groupItem = null
 
+  if (result.data != null) {
+    banner = result.data.filter((banner) => banner.type === 'solo')
+    groupItem = result.data.filter((banner) => banner.type === 'group')
+  }
 
-  // const sliderList = categories.map((category: category) => (
-  //   <li
-  //     key={category.id}
-  //     className="flex flex-col justify-center items-center bg-gray-400 rounded-lg cursor-pointer w-24 h-22 shrink-0 transition-all duration-300 ease-in-out hover:bg-gray-500 hover:shadow-lg hover:scale-105"
-  //   >
-  //     <div className="mb-2 text-xl transition-transform duration-300 group-hover:scale-110">
-  //       {getIconByTitle(category.categoryName)}
-  //     </div>
-  //     <div className="text-xs font-medium select-none">
-  //       {category.categoryName}
-  //     </div>
-  //   </li>
-  // ))
 
   return (
     <>
       <GridBanner />
-      {/* <Container containerClassName="bg-gray-200">
-        <Slider title="browse by category" children={sliderList} />
-      </Container> */}
       <Container>
-        <RecommendationItemsList />
+        <CategoryList className={'py-3'} />
+        <RecommendationItemsList
+          filterList={['bestseller', 'new arrival', 'featured products']}
+          count={8}
+        />
       </Container>
-      {/* <CardBanner cardList={} /> */}
+      <CardBanner cardList={groupItem} type="groupItem" className="my-5" />
       <Container>
-        <ProductList title="Discounts up" productList={topDiscountedItems} />
+        <RecommendationItemsList filterList={['discountUp']} count={4} />
       </Container>
-      {/* <CardBanner  cardList={}/> */}
-
+      <CardBanner cardList={banner} type="banner" />
     </>
   )
 }

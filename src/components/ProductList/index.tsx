@@ -1,23 +1,33 @@
 import ProductCard from '@/components/ProductCard'
 import { TItemListProps } from '@/types/type'
+import { IoMdHeartEmpty } from 'react-icons/io'
+import { twMerge } from 'tailwind-merge'
+import Button from '../Button'
+import SkeletonProductCard from '@/ui/SkeletonProductCard'
 
-
-const ProductList = ({ productList, title }: TItemListProps) => {
+const ProductList = ({
+  productList,
+  isLoading = false,
+  count,
+  className,
+}: TItemListProps) => {
   return (
-    <ul>
-      <div className="text-lg font-medium">{title}</div>
-      {productList.map((product) => (
-        <li key={product.id}>
-          <ProductCard
-            id={product.id}
-            key={product.id}
-            name={product.name}
-            price={product.price}
-            image={product.image}
-          />
-        </li>
-      ))}
-    </ul>
+      <ul
+        className={twMerge(
+          'flex flex-wrap items-start justify-center gap-3',
+          className
+        )}
+      >
+        {isLoading
+          ? Array.from({ length: count ?? 1 }).map((_, index) => (
+              <SkeletonProductCard key={index} />
+            ))
+          : productList.map((product) => (
+              <li className="w-full sm:w-fit" key={product.id}>
+                <ProductCard {...product} />
+              </li>
+            ))}
+      </ul>
   )
 }
 
